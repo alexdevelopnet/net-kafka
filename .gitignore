@@ -27,3 +27,4 @@ dist/
 
 # Migrations (opcional, se não quiser versionar)
 # src/api/Migrations/ 
+.fake
