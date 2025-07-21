@@ -15,8 +15,7 @@ namespace api.Controllers
             _context = context;
             _kafkaProducer = kafkaProducer;
         }
-
-        // GET: api/pedido
+ 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
         {
@@ -25,8 +24,7 @@ namespace api.Controllers
                 .ThenInclude(pp => pp.Produto)
                 .ToListAsync();
         }
-
-        // GET: api/pedido/{id}
+ 
         [HttpGet("{id}")]
         public async Task<ActionResult<Pedido>> GetPedido(int id)
         {
@@ -37,8 +35,7 @@ namespace api.Controllers
             if (pedido == null) return NotFound();
             return pedido;
         }
-
-        // POST: api/pedido
+ 
         [HttpPost]
         public async Task<ActionResult<Pedido>> PostPedido(PedidoDto pedidoDto)
         {
@@ -54,8 +51,7 @@ namespace api.Controllers
             };
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
-
-            // Publica o evento no Kafka
+ 
             await _kafkaProducer.PublishAsync(new
             {
                 PedidoId = pedido.Id,
@@ -63,8 +59,7 @@ namespace api.Controllers
                 Status = pedido.Status,
                 Produtos = pedido.PedidoProdutos.Select(pp => new { pp.ProdutoId, pp.Quantidade })
             });
-
-            // Retorna apenas um resumo do pedido criado, evitando ciclos
+ 
             return CreatedAtAction(nameof(GetPedido), new { id = pedido.Id }, new {
                 pedido.Id,
                 pedido.Data,
@@ -72,8 +67,7 @@ namespace api.Controllers
                 Produtos = pedido.PedidoProdutos.Select(pp => new { pp.ProdutoId, pp.Quantidade })
             });
         }
-
-        // PUT: api/pedido/{id}/status
+ 
         [HttpPut("{id}/status")]
         public async Task<IActionResult> AtualizarStatus(int id, [FromBody] string status)
         {
@@ -83,8 +77,7 @@ namespace api.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
-
-        // DELETE: api/pedido/{id}
+ 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePedido(int id)
         {

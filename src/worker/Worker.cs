@@ -8,13 +8,13 @@ namespace worker
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = "localhost:9092", // endereço do broker Kafka
-                GroupId = "loja-consumer-group", // identificador do grupo de consumidores
-                AutoOffsetReset = AutoOffsetReset.Earliest // consome desde o início do tópico
+                BootstrapServers = "localhost:9092", 
+                GroupId = "loja-consumer-group",
+                AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
-            consumer.Subscribe("pedidos"); // inscreve no tópico 'pedidos'
+            consumer.Subscribe("pedidos"); 
 
             Console.WriteLine("Consumidor Kafka iniciado. Aguardando mensagens...");
 
@@ -35,7 +35,7 @@ namespace worker
             }
             catch (OperationCanceledException)
             {
-                // Encerramento solicitado
+               
             }
             finally
             {
