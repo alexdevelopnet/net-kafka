@@ -9,9 +9,11 @@ namespace api.Controllers
     public class PedidoController : ControllerBase
     {
         private readonly LojaContext _context;
-        public PedidoController(LojaContext context)
+        private readonly KafkaProducerService _kafkaProducer;
+        public PedidoController(LojaContext context, KafkaProducerService kafkaProducer)
         {
             _context = context;
+            _kafkaProducer = kafkaProducer;
         }
 
         // GET: api/pedido
@@ -52,7 +54,23 @@ namespace api.Controllers
             };
             _context.Pedidos.Add(pedido);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetPedido), new { id = pedido.Id }, pedido);
+
+            // Publica o evento no Kafka
+            await _kafkaProducer.PublishAsync(new
+            {
+                PedidoId = pedido.Id,
+                Data = pedido.Data,
+                Status = pedido.Status,
+                Produtos = pedido.PedidoProdutos.Select(pp => new { pp.ProdutoId, pp.Quantidade })
+            });
+
+            // Retorna apenas um resumo do pedido criado, evitando ciclos
+            return CreatedAtAction(nameof(GetPedido), new { id = pedido.Id }, new {
+                pedido.Id,
+                pedido.Data,
+                pedido.Status,
+                Produtos = pedido.PedidoProdutos.Select(pp => new { pp.ProdutoId, pp.Quantidade })
+            });
         }
 
         // PUT: api/pedido/{id}/status

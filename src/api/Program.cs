@@ -15,6 +15,10 @@ builder.Services.AddSwaggerGen(c =>
 builder.Services.AddDbContext<LojaContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+var kafkaBootstrapServers = builder.Configuration["Kafka:BootstrapServers"];
+builder.Services.AddSingleton<KafkaProducerService>(sp =>
+    new KafkaProducerService(kafkaBootstrapServers));
+
 var app = builder.Build();
 
 
