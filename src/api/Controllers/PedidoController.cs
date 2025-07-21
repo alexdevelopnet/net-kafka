@@ -1,0 +1,91 @@
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using api.Models;
+
+namespace api.Controllers
+{
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PedidoController : ControllerBase
+    {
+        private readonly LojaContext _context;
+        public PedidoController(LojaContext context)
+        {
+            _context = context;
+        }
+
+        // GET: api/pedido
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Pedido>>> GetPedidos()
+        {
+            return await _context.Pedidos
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .ToListAsync();
+        }
+
+        // GET: api/pedido/{id}
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Pedido>> GetPedido(int id)
+        {
+            var pedido = await _context.Pedidos
+                .Include(p => p.PedidoProdutos)
+                .ThenInclude(pp => pp.Produto)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (pedido == null) return NotFound();
+            return pedido;
+        }
+
+        // POST: api/pedido
+        [HttpPost]
+        public async Task<ActionResult<Pedido>> PostPedido(PedidoDto pedidoDto)
+        {
+            var pedido = new Pedido
+            {
+                Data = DateTime.UtcNow,
+                Status = "Pendente",
+                PedidoProdutos = pedidoDto.Produtos.Select(pp => new PedidoProduto
+                {
+                    ProdutoId = pp.ProdutoId,
+                    Quantidade = pp.Quantidade
+                }).ToList()
+            };
+            _context.Pedidos.Add(pedido);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetPedido), new { id = pedido.Id }, pedido);
+        }
+
+        // PUT: api/pedido/{id}/status
+        [HttpPut("{id}/status")]
+        public async Task<IActionResult> AtualizarStatus(int id, [FromBody] string status)
+        {
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null) return NotFound();
+            pedido.Status = status;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // DELETE: api/pedido/{id}
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePedido(int id)
+        {
+            var pedido = await _context.Pedidos.FindAsync(id);
+            if (pedido == null) return NotFound();
+            _context.Pedidos.Remove(pedido);
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+    }
+
+    // DTO para criar pedido
+    public class PedidoDto
+    {
+        public List<PedidoProdutoDto> Produtos { get; set; } = new();
+    }
+    public class PedidoProdutoDto
+    {
+        public int ProdutoId { get; set; }
+        public int Quantidade { get; set; }
+    }
+} 
