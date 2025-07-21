@@ -1,23 +1,46 @@
-namespace worker;
+using Confluent.Kafka;
 
-public class Worker : BackgroundService
+namespace worker
 {
-    private readonly ILogger<Worker> _logger;
-
-    public Worker(ILogger<Worker> logger)
+    public class Worker : BackgroundService
     {
-        _logger = logger;
-    }
-
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        while (!stoppingToken.IsCancellationRequested)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            if (_logger.IsEnabled(LogLevel.Information))
+            var config = new ConsumerConfig
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+                BootstrapServers = "localhost:9092", // endereço do broker Kafka
+                GroupId = "loja-consumer-group", // identificador do grupo de consumidores
+                AutoOffsetReset = AutoOffsetReset.Earliest // consome desde o início do tópico
+            };
+
+            using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
+            consumer.Subscribe("pedidos"); // inscreve no tópico 'pedidos'
+
+            Console.WriteLine("Consumidor Kafka iniciado. Aguardando mensagens...");
+
+            try
+            {
+                while (!stoppingToken.IsCancellationRequested)
+                {
+                    try
+                    {
+                        var result = consumer.Consume(stoppingToken);
+                        Console.WriteLine($"Mensagem recebida do Kafka: {result.Message.Value}");
+                    }
+                    catch (ConsumeException ex)
+                    {
+                        Console.WriteLine($"Erro ao consumir mensagem: {ex.Message}");
+                    }
+                }
             }
-            await Task.Delay(1000, stoppingToken);
+            catch (OperationCanceledException)
+            {
+                // Encerramento solicitado
+            }
+            finally
+            {
+                consumer.Close();
+            }
         }
     }
 }

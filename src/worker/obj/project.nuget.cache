@@ -1,9 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "nNYQFCyjmUY=",
+  "dgSpecHash": "c6ab9TqJNGo=",
   "success": true,
   "projectFilePath": "C:\\anf\\net-kafka\\src\\worker\\worker.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\anfsu\\.nuget\\packages\\confluent.kafka\\2.11.0\\confluent.kafka.2.11.0.nupkg.sha512",
+    "C:\\Users\\anfsu\\.nuget\\packages\\librdkafka.redist\\2.11.0\\librdkafka.redist.2.11.0.nupkg.sha512",
     "C:\\Users\\anfsu\\.nuget\\packages\\microsoft.extensions.configuration\\9.0.5\\microsoft.extensions.configuration.9.0.5.nupkg.sha512",
     "C:\\Users\\anfsu\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\9.0.5\\microsoft.extensions.configuration.abstractions.9.0.5.nupkg.sha512",
     "C:\\Users\\anfsu\\.nuget\\packages\\microsoft.extensions.configuration.binder\\9.0.5\\microsoft.extensions.configuration.binder.9.0.5.nupkg.sha512",

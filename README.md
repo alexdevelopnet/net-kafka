@@ -8,6 +8,35 @@ Este projeto é um exemplo didático de uma loja virtual, criado para aprender e
 - **Docker Compose** - Orquestração dos serviços
 - (Em breve) **Angular** - Frontend
 
+## Fluxo de Eventos com Kafka
+
+### 1. **KafkaProducerService (Produtor de eventos Kafka na API)**
+- Classe responsável por publicar mensagens no Kafka.
+- Usa o endereço do broker (ex: `localhost:9092`) configurado no `appsettings.json`.
+- Método `PublishAsync` serializa o objeto e publica no tópico `pedidos`.
+
+### 2. **API .NET (Backend)**
+- Expõe endpoints REST para criar produtos e pedidos.
+- Ao criar um pedido, salva no banco e publica um evento no Kafka usando o `KafkaProducerService`.
+
+### 3. **Worker .NET (Consumidor Kafka)**
+- Serviço separado que se conecta ao Kafka e escuta o tópico `pedidos`.
+- Exibe/processa as mensagens recebidas no console.
+
+### Diagrama do fluxo
+
+```mermaid
+sequenceDiagram
+    participant API as API .NET
+    participant Kafka as Kafka (Docker)
+    participant Worker as Worker .NET
+
+    API->>Kafka: Publica mensagem (pedido criado) no tópico "pedidos"
+    Worker-->>Kafka: Fica escutando o tópico "pedidos"
+    Kafka-->>Worker: Entrega a mensagem publicada
+    Worker->>Console: Exibe/processa a mensagem recebida
+```
+
 ## Funcionalidades
 - Cadastro de produtos (CRUD)
 - Cadastro de pedidos (CRUD)
@@ -29,10 +58,14 @@ dotnet run --project src/api/api.csproj
 ```
 Acesse o Swagger em: [http://localhost:5022/swagger](http://localhost:5022/swagger)
 
-### 3. Teste os endpoints
+### 3. Rode o Worker para consumir mensagens do Kafka
+```sh
+dotnet run --project src/worker/worker.csproj
+```
+
+### 4. Teste os endpoints
 - Cadastre produtos
-- Cadastre pedidos
-- Liste e atualize status
+- Cadastre pedidos (veja a mensagem aparecer no Worker)
 
 ## Estrutura do Projeto
 ```
@@ -40,7 +73,7 @@ net-kafka/
   ├─ docker-compose.yml
   └─ src/
       ├─ api/        # Projeto ASP.NET Core (API)
-      └─ worker/     # (Em breve) Worker para consumir Kafka
+      └─ worker/     # Worker para consumir Kafka
 ```
 
 ## Tecnologias
@@ -51,9 +84,7 @@ net-kafka/
 - Swagger (Swashbuckle)
 
 ## Próximos Passos
-- [ ] Publicar eventos no Kafka ao criar pedido
-- [ ] Worker .NET para consumir eventos do Kafka
-- [ ] Frontend Angular
+- [ ] Frontend Angular elegante e funcional
 
 ---
 
