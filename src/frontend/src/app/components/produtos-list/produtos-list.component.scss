@@ -1,17 +1,66 @@
 .produtos-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px;
+  gap: 32px;
   justify-content: center;
-  margin-top: 32px;
+  margin-top: 40px;
 }
 
 .produto-card {
-  width: 250px;
-  background: #fff0f6;
-  border-radius: 16px;
-  box-shadow: 0 2px 8px #f8bbd0;
+  width: 260px;
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px #f8bbd0;
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: box-shadow 0.2s, transform 0.2s;
+  &:hover {
+    box-shadow: 0 8px 32px #ba68c8;
+    transform: translateY(-4px) scale(1.03);
+  }
+  .img-container {
+    width: 100%;
+    height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 18px 18px 0 0;
+    background: #fff0f6;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 18px 18px 0 0;
+      transition: transform 0.2s;
+    }
+  }
+  .nome {
+    font-family: 'Playfair Display', 'Montserrat', Arial, sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 12px 0 4px 0;
+    color: #ad1457;
+    text-align: center;
+  }
+  .preco {
+    color: #d81b60;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 4px;
+    text-align: center;
+  }
+  .estoque {
+    color: #ba68c8;
+    font-size: 0.95rem;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  mat-card-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 8px;
+  }
 }

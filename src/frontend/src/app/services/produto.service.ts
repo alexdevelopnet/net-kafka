@@ -7,6 +7,7 @@ export interface Produto {
   nome: string;
   preco: number;
   estoque: number;
+  imagemUrl?: string; // url opcional para imagem do produto
 }
 
 @Injectable({
