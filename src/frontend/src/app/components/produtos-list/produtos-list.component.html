@@ -3,17 +3,14 @@
 </mat-toolbar>
 
 <div class="produtos-grid">
-  <mat-card *ngFor="let produto of produtos" class="produto-card">
-    <div class="img-container">
-      <img mat-card-image [src]="produto.imagemUrl || 'https://via.placeholder.com/250x250/fff0f6/ba68c8?text=Produto'" alt="Imagem do produto">
+  <div *ngFor="let produto of produtos" class="produto-card-visual">
+    <div class="produto-img-container">
+      <img [src]="produto.imagemUrl || 'https://via.placeholder.com/300x300/fff0f6/ba68c8?text=Produto'" alt="Imagem do produto" />
     </div>
-    <mat-card-content>
-      <div class="nome">{{ produto.nome }}</div>
-      <div class="preco">R$ {{ produto.preco | number:'1.2-2' }}</div>
-      <div class="estoque">Estoque: {{ produto.estoque }}</div>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="accent">Comprar</button>
-    </mat-card-actions>
-  </mat-card>
+    <div class="produto-info">
+      <div class="produto-nome">{{ produto.nome }}</div>
+      <div class="produto-preco">R$ {{ produto.preco | number:'1.2-2' }}</div>
+      <button mat-raised-button color="accent" class="produto-btn">Comprar</button>
+    </div>
+  </div>
 </div>

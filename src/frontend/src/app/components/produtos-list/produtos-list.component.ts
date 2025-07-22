@@ -28,6 +28,9 @@ export class ProdutosListComponent implements OnInit {
   ngOnInit(): void {
     this.produtoService.getProdutos().subscribe({
       next: (data) => {
+        // Associa imagens locais aos dois primeiros produtos, se existirem
+        if (data.length > 0) data[0].imagemUrl = '/assets/produtos/vestidos/1.webp';
+        if (data.length > 1) data[1].imagemUrl = '/assets/produtos/vestidos/3.webp';
         this.produtos = data;
         this.loading = false;
       },
