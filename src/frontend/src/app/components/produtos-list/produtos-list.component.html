@@ -1,1 +1,19 @@
-<p>produtos-list works!</p>
+<mat-toolbar color="primary">
+  <span>Loja Feminina</span>
+</mat-toolbar>
+
+<div class="produtos-grid">
+  <mat-card *ngFor="let produto of produtos" class="produto-card">
+    <mat-card-header>
+      <mat-card-title>{{ produto.nome }}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image src="https://via.placeholder.com/250x200/fff0f6/ba68c8?text=Produto" alt="Imagem do produto">
+    <mat-card-content>
+      <p class="preco">R$ {{ produto.preco | number:'1.2-2' }}</p>
+      <p class="estoque">Estoque: {{ produto.estoque }}</p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="accent">Comprar</button>
+    </mat-card-actions>
+  </mat-card>
+</div>

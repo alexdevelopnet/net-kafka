@@ -1,0 +1,18 @@
+.main-toolbar {
+  background: linear-gradient(90deg, #f8bbd0 0%, #fce4ec 100%);
+  color: #ad1457;
+  font-family: 'Montserrat', Arial, sans-serif;
+  .logo {
+    font-weight: bold;
+    font-size: 1.5rem;
+    letter-spacing: 2px;
+  }
+  .spacer {
+    flex: 1 1 auto;
+  }
+  button[mat-button], button[mat-raised-button] {
+    border-radius: 20px;
+    margin-left: 8px;
+    font-weight: 500;
+  }
+}

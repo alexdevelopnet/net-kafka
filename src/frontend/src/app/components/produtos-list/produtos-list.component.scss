@@ -1,0 +1,17 @@
+.produtos-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+  margin-top: 32px;
+}
+
+.produto-card {
+  width: 250px;
+  background: #fff0f6;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px #f8bbd0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}

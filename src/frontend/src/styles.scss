@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+  font-family: 'Poppins', 'Montserrat', Arial, sans-serif;
+  background: #fff0f6;
+}
+
+.logo, .mat-card-title {
+  font-family: 'Playfair Display', 'Montserrat', Arial, sans-serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.logo-script {
+  font-family: 'Dancing Script', cursive;
+  font-size: 2rem;
+  color: #d81b60;
+}
